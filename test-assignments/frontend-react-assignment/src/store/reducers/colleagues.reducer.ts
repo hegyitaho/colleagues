@@ -4,47 +4,50 @@ import { Colleague } from '../types/colleague.type'
 export type ColleaguesState = Colleague[]
 
 const initialState: ColleaguesState = [
-  {
-    name: 'Tori Broughton',
-    favorite: false
-  },
-  {
-    name: 'Marcie Tyson',
-    favorite: false
-  },
-  {
-    name: 'Zaydan Navarro',
-    favorite: false
-  },
-  {
-    name: 'Carmen Ahmed',
-    favorite: false
-  },
-  {
-    name: 'Leanna Bowman',
-    favorite: false
-  }
+  Collegaue({
+    name: 'Tori Broughton'
+  }),
+  Collegaue({
+    name: 'Marcie Tyson'
+  }),
+  Collegaue({
+    name: 'Zaydan Navarro'
+  }),
+  Collegaue({
+    name: 'Carmen Ahmed'
+  }),
+  Collegaue({
+    name: 'Leanna Bowman'
+  })
 ]
 
 export const colleaguesSlice = createSlice({
   name: 'colleagues',
   initialState,
   reducers: {
-    addColleague: (state, action: PayloadAction<Colleague>) => {
-      state.push(action.payload)
-    },
-    removeColleague: (state, action: PayloadAction<{ colleagueIndex: number }>) => {
-      state.splice(action.payload.colleagueIndex, 1)
-    },
-    favoriteColleague: (
-      state,
-      action: PayloadAction<{ colleagueIndex: number; favorite: boolean }>
-    ) => {
-      state[action.payload.colleagueIndex].favorite = action.payload.favorite
-    }
+    addColleague: (state, action: PayloadAction<ColleagueToBeCreated>) =>
+      state.concat(Collegaue(action.payload)),
+    removeColleague: (state, action: PayloadAction<{ id: string }>) =>
+      state.filter(({ id }) => id !== action.payload.id),
+    favoriteColleagueToggle: (state, action: PayloadAction<{ id: string }>) =>
+      state.map((colleague) =>
+        colleague.id === action.payload.id
+          ? { ...colleague, favorite: !colleague.favorite }
+          : colleague
+      )
   }
 })
 
-export const { addColleague, removeColleague, favoriteColleague } = colleaguesSlice.actions
+export const { addColleague, removeColleague, favoriteColleagueToggle } = colleaguesSlice.actions
 
 export const { reducer: colleaguesReducer } = colleaguesSlice
+
+type ColleagueToBeCreated = Pick<Colleague, 'name'> & Pick<Partial<Colleague>, 'favorite'>
+
+function Collegaue({ name, favorite = false }: ColleagueToBeCreated): Colleague {
+  return {
+    name,
+    favorite,
+    id: crypto.randomUUID()
+  }
+}

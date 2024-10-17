@@ -1,37 +1,32 @@
+import { PropsWithChildren } from 'react'
 import { ReactComponent as StarFillIcon } from '../../assets/star-fill.svg'
 import { ReactComponent as StarIcon } from '../../assets/star.svg'
 import { ReactComponent as TrashIcon } from '../../assets/trash.svg'
 import { useAppDispatch } from '../../hooks/redux'
-import { favoriteColleague, removeColleague } from '../../store/reducers/colleagues.reducer'
+import { favoriteColleagueToggle, removeColleague } from '../../store/reducers/colleagues.reducer'
 import { Colleague } from '../../store/types/colleague.type'
 
-interface ColleagueProps {
-  index: number
-  colleague: Colleague
-}
-
-export function ColleagueRow(props: ColleagueProps) {
-  const { colleague, index } = props
+export function ColleagueRow(props: PropsWithChildren<Colleague>) {
   const dispatch = useAppDispatch()
 
   function handleDelete() {
-    dispatch(removeColleague({ colleagueIndex: index }))
+    dispatch(removeColleague({ id: props.id }))
   }
 
   function handleFavorite() {
-    dispatch(favoriteColleague({ colleagueIndex: index, favorite: !colleague.favorite }))
+    dispatch(favoriteColleagueToggle({ id: props.id }))
   }
 
   return (
     <div className='flex justify-between items-center px-2 h-16 bg-white'>
-      <p className='font-semibold'>{colleague.name}</p>
+      <p className='font-semibold'>{props.name}</p>
       <div className='space-x-2'>
         <button
           type='button'
           className='bg-gray-200 p-2 border border-gray-400 rounded hover:bg-gray-100'
           onClick={handleFavorite}
         >
-          {colleague.favorite ? <StarFillIcon /> : <StarIcon />}
+          {props.favorite ? <StarFillIcon /> : <StarIcon />}
         </button>
         <button
           type='button'
