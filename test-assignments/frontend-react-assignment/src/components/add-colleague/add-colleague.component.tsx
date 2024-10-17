@@ -4,18 +4,23 @@ import { addColleague } from '../../store/reducers/colleagues.reducer'
 
 export function AddColleague() {
   const [name, setName] = useState('')
+  const [title, setTitle] = useState('')
   const dispatch = useAppDispatch()
 
-  function handleChange(event: ChangeEvent<HTMLInputElement>) {
+  function handleNameChange(event: ChangeEvent<HTMLInputElement>) {
     setName(event.target.value)
+  }
+  function handleTitleChange(event: ChangeEvent<HTMLInputElement>) {
+    setTitle(event.target.value)
   }
 
   function handleAddColleague(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     if (name.trim().length > 0) {
-      dispatch(addColleague({ name, favorite: false }))
+      dispatch(addColleague({ name, favorite: false, title: title.trim() }))
+      setName('')
+      setTitle('')
     }
-    setName('')
   }
 
   return (
@@ -24,10 +29,17 @@ export function AddColleague() {
         autoFocus
         type='text'
         required
-        className='w-full px-2 focus:outline-none border-b border-gray-400'
-        onChange={handleChange}
+        className='input-default border-r'
+        onChange={handleNameChange}
         placeholder='Name'
         value={name}
+      />
+      <input
+        type='text'
+        className='input-default'
+        onChange={handleTitleChange}
+        placeholder='Title'
+        value={title}
       />
       <button type='submit' className='button-default'>
         Add

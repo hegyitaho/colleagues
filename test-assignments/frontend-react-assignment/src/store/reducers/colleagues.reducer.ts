@@ -8,7 +8,8 @@ const initialState: ColleaguesState = [
     name: 'Tori Broughton'
   }),
   Collegaue({
-    name: 'Marcie Tyson'
+    name: 'Marcie Tyson',
+    title: 'boss'
   }),
   Collegaue({
     name: 'Zaydan Navarro'
@@ -44,12 +45,13 @@ export const { addColleague, removeColleague, favoriteColleagueToggle, reset } =
 
 export const { reducer: colleaguesReducer } = colleaguesSlice
 
-type ColleagueToBeCreated = Pick<Colleague, 'name'> & Pick<Partial<Colleague>, 'favorite'>
+type ColleagueToBeCreated = Pick<Colleague, 'name'> & Partial<Colleague>
 
-function Collegaue({ name, favorite = false }: ColleagueToBeCreated): Colleague {
+function Collegaue({ name, favorite = false, title = '' }: ColleagueToBeCreated): Colleague {
   return {
     name,
     favorite,
+    title,
     id: crypto.randomUUID()
   }
 }

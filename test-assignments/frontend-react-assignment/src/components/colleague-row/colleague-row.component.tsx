@@ -19,7 +19,8 @@ export function ColleagueRow(props: PropsWithChildren<Colleague>) {
 
   return (
     <div className='flex justify-between items-center px-2 h-16 bg-white'>
-      <p className='font-semibold'>{props.name}</p>
+      <p className='font-semibold flex-1'>{props.name}</p>
+      <p className='flex-1'>{props.title}</p>
       <div className='space-x-2'>
         <button
           type='button'

@@ -32,8 +32,29 @@ describe('can add new colleagues', () => {
   function assertNewUserIsAdded() {
     const colleagues = store.getState().colleagues
     expect(colleagues).toHaveLength(6)
-    expect(colleagues).toContainEqual({ name: 'new user', favorite: false, id: expect.any(String) })
+    expect(colleagues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ name: 'new user', favorite: false, title: '' })
+      ])
+    )
   }
+})
+
+test('can add user with title', async () => {
+  Setup()
+
+  const userName = 'new user'
+  const titleName = 'new title'
+  await userEvent.type(screen.getByPlaceholderText('Name'), userName)
+  await userEvent.type(screen.getByPlaceholderText('Title'), titleName)
+  await userEvent.click(screen.getByText('Add'))
+
+  const colleagues = store.getState().colleagues
+  expect(colleagues).toEqual(
+    expect.arrayContaining([
+      expect.objectContaining({ name: 'new user', favorite: false, title: titleName })
+    ])
+  )
 })
 
 test('cannot add colleague without a name', async () => {

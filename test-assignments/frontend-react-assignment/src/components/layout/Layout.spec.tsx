@@ -22,14 +22,22 @@ test('unfavoriting user removes them from favorites column', async () => {
   const colleagueRow = await Setup()
   await assertNewFavoriteUserIsAlsoDisplayedInFavoritesColumn(colleagueRow)
 
-  const favoriteColleagueRow = within(screen.getByTestId('favorite-colleagues'))
-    .getByText(favoriteUser)
-    .closest('li')
+  const favoriteColleagueRow = getFavoriteColleagueRow()
   await userEvent.click(within(favoriteColleagueRow!).getByTitle('unfavorite'))
 
   expect(screen.getByTestId('favorite-colleagues')).not.toHaveTextContent(favoriteUser)
   expect(screen.getByTestId('all-colleagues')).toHaveTextContent(favoriteUser)
 })
+
+test('title is displayed next to the user', async () => {
+  const colleagueRow = await Setup()
+
+  expect(colleagueRow).toHaveTextContent('boss')
+})
+
+function getFavoriteColleagueRow() {
+  return within(screen.getByTestId('favorite-colleagues')).getByText(favoriteUser).closest('li')
+}
 
 async function assertNewFavoriteUserIsAlsoDisplayedInFavoritesColumn(colleagueRow: HTMLLIElement) {
   await userEvent.click(within(colleagueRow!).getByTitle('favorite'))
