@@ -26,14 +26,14 @@ export function ColleagueRow(props: PropsWithChildren<Colleague>) {
           className='bg-gray-200 p-2 border border-gray-400 rounded hover:bg-gray-100'
           onClick={handleFavorite}
         >
-          {props.favorite ? <StarFillIcon /> : <StarIcon />}
+          {props.favorite ? <StarFillIcon title='unfavorite' /> : <StarIcon title='favorite' />}
         </button>
         <button
           type='button'
           className='bg-gray-200 p-2 border border-gray-400 rounded hover:bg-gray-100'
           onClick={handleDelete}
         >
-          <TrashIcon />
+          <TrashIcon title='delete' />
         </button>
       </div>
     </div>
