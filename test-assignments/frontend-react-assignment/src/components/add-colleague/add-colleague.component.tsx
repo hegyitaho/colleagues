@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, FormEvent, useState } from 'react'
 import { useAppDispatch } from '../../hooks/redux'
 import { addColleague } from '../../store/reducers/colleagues.reducer'
 
@@ -10,23 +10,28 @@ export function AddColleague() {
     setName(event.target.value)
   }
 
-  function handleAddColleague() {
-    dispatch(addColleague({ name, favorite: false }))
+  function handleAddColleague(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    if (name.trim().length > 0) {
+      dispatch(addColleague({ name, favorite: false }))
+    }
     setName('')
   }
 
   return (
-    <div className='flex h-10 drop-shadow-sm'>
+    <form onSubmit={handleAddColleague} className='flex h-10 drop-shadow-sm'>
       <input
+        autoFocus
         type='text'
+        required
         className='w-full px-2 focus:outline-none border-b border-gray-400'
         onChange={handleChange}
         placeholder='Name'
         value={name}
       />
-      <button type='button' className='button-default' onClick={handleAddColleague}>
+      <button type='submit' className='button-default'>
         Add
       </button>
-    </div>
+    </form>
   )
 }

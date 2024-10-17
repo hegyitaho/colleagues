@@ -23,7 +23,7 @@ const initialState: ColleaguesState = [
 
 export const colleaguesSlice = createSlice({
   name: 'colleagues',
-  initialState,
+  initialState: [...initialState],
   reducers: {
     addColleague: (state, action: PayloadAction<ColleagueToBeCreated>) =>
       state.concat(Collegaue(action.payload)),
@@ -34,11 +34,13 @@ export const colleaguesSlice = createSlice({
         colleague.id === action.payload.id
           ? { ...colleague, favorite: !colleague.favorite }
           : colleague
-      )
+      ),
+    reset: () => [...initialState]
   }
 })
 
-export const { addColleague, removeColleague, favoriteColleagueToggle } = colleaguesSlice.actions
+export const { addColleague, removeColleague, favoriteColleagueToggle, reset } =
+  colleaguesSlice.actions
 
 export const { reducer: colleaguesReducer } = colleaguesSlice
 
