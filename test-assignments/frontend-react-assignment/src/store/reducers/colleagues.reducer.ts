@@ -4,20 +4,20 @@ import { Colleague } from '../types/colleague.type'
 export type ColleaguesState = Colleague[]
 
 const initialState: ColleaguesState = [
-  Collegaue({
+  createColleague({
     name: 'Tori Broughton'
   }),
-  Collegaue({
+  createColleague({
     name: 'Marcie Tyson',
     title: 'boss'
   }),
-  Collegaue({
+  createColleague({
     name: 'Zaydan Navarro'
   }),
-  Collegaue({
+  createColleague({
     name: 'Carmen Ahmed'
   }),
-  Collegaue({
+  createColleague({
     name: 'Leanna Bowman'
   })
 ]
@@ -26,16 +26,15 @@ export const colleaguesSlice = createSlice({
   name: 'colleagues',
   initialState: [...initialState],
   reducers: {
-    addColleague: (state, action: PayloadAction<ColleagueToBeCreated>) =>
-      state.concat(Collegaue(action.payload)),
+    addColleague: (state, action: PayloadAction<ColleagueToBeCreated>) => {
+      state.push(createColleague(action.payload))
+    },
     removeColleague: (state, action: PayloadAction<{ id: string }>) =>
       state.filter(({ id }) => id !== action.payload.id),
-    favoriteColleagueToggle: (state, action: PayloadAction<{ id: string }>) =>
-      state.map((colleague) =>
-        colleague.id === action.payload.id
-          ? { ...colleague, favorite: !colleague.favorite }
-          : colleague
-      ),
+    favoriteColleagueToggle: (state, action: PayloadAction<{ id: string }>) => {
+      const targetColleague = state.find((colleague) => colleague.id === action.payload.id)
+      targetColleague!.favorite = !targetColleague?.favorite
+    },
     reset: () => [...initialState]
   }
 })
@@ -47,7 +46,7 @@ export const { reducer: colleaguesReducer } = colleaguesSlice
 
 type ColleagueToBeCreated = Pick<Colleague, 'name'> & Partial<Colleague>
 
-function Collegaue({ name, favorite = false, title = '' }: ColleagueToBeCreated): Colleague {
+function createColleague({ name, favorite = false, title = '' }: ColleagueToBeCreated): Colleague {
   return {
     name,
     favorite,

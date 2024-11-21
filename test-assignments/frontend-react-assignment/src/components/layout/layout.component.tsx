@@ -6,7 +6,7 @@ import { ColleaguesList } from '../colleagues-list/colleagues-list.component'
 import { withPagination } from '../pagination/Pagination'
 
 const PaginatedColleagues = withPagination(ColleagueRow, { minHeight: 320 })
-const FavoritePaginatedColleagues = withPagination(FavoriteColleagueRow, { minHeight: 320 })
+const FavoritePaginatedColleagues = withPagination(FavoriteColleagueRow, { minHeight: 360 })
 
 export function Layout() {
   const colleagues = useAppSelector((state) => state.colleagues)

@@ -6,27 +6,26 @@ import { store } from '../../store/store'
 import { AddColleague } from './add-colleague.component'
 import { reset } from '../../store/reducers/colleagues.reducer'
 
+const userName = 'new user'
 afterEach(() => {
   store.dispatch(reset())
 })
 describe('can add new colleagues', () => {
-  afterEach(() => {
+  test('by hitting enter', async () => {
+    setup()
+
+    await userEvent.type(screen.getByPlaceholderText('Name'), userName + '{enter}')
+
     assertNewUserIsAdded()
   })
 
-  const userName = 'new user'
-  test('by hitting enter', async () => {
-    Setup()
-
-    await userEvent.type(screen.getByPlaceholderText('Name'), userName + '{enter}')
-  })
-
   test('by clicking the add button', async () => {
-    Setup()
+    setup()
 
-    const userName = 'new user'
     await userEvent.type(screen.getByPlaceholderText('Name'), userName)
     await userEvent.click(screen.getByText('Add'))
+
+    assertNewUserIsAdded()
   })
 
   function assertNewUserIsAdded() {
@@ -41,9 +40,8 @@ describe('can add new colleagues', () => {
 })
 
 test('can add user with title', async () => {
-  Setup()
+  setup()
 
-  const userName = 'new user'
   const titleName = 'new title'
   await userEvent.type(screen.getByPlaceholderText('Name'), userName)
   await userEvent.type(screen.getByPlaceholderText('Title'), titleName)
@@ -58,19 +56,17 @@ test('can add user with title', async () => {
 })
 
 test('cannot add colleague without a name', async () => {
-  Setup()
+  setup()
 
   expect(store.getState().colleagues).toHaveLength(5)
   await userEvent.type(screen.getByPlaceholderText('Name'), '        {enter}')
   expect(store.getState().colleagues).toHaveLength(5)
 })
 
-function Setup() {
-  const Component = () => (
+function setup() {
+  render(
     <Provider store={store}>
       <AddColleague />
     </Provider>
   )
-
-  render(<Component />)
 }

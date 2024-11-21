@@ -1,5 +1,5 @@
 /* eslint-disable testing-library/no-node-access */
-import { render, screen, waitFor, within } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import userEvent from '@testing-library/user-event'
 import { Provider } from 'react-redux'
@@ -13,13 +13,13 @@ afterEach(() => {
 const favoriteUser = 'Marcie Tyson'
 
 test('favoriting a colleague puts it also in the favorites column', async () => {
-  const colleagueRow = await Setup()
+  const colleagueRow = await setup()
 
   await assertNewFavoriteUserIsAlsoDisplayedInFavoritesColumn(colleagueRow)
 })
 
 test('unfavoriting user removes them from favorites column', async () => {
-  const colleagueRow = await Setup()
+  const colleagueRow = await setup()
   await assertNewFavoriteUserIsAlsoDisplayedInFavoritesColumn(colleagueRow)
 
   const favoriteColleagueRow = getFavoriteColleagueRow()
@@ -30,7 +30,7 @@ test('unfavoriting user removes them from favorites column', async () => {
 })
 
 test('title is displayed next to the user', async () => {
-  const colleagueRow = await Setup()
+  const colleagueRow = await setup()
 
   expect(colleagueRow).toHaveTextContent('boss')
 })
@@ -45,14 +45,12 @@ async function assertNewFavoriteUserIsAlsoDisplayedInFavoritesColumn(colleagueRo
   expect(screen.getByTestId('all-colleagues')).toHaveTextContent(favoriteUser)
 }
 
-async function Setup() {
-  const Component = () => (
+async function setup() {
+  render(
     <Provider store={store}>
       <Layout />
     </Provider>
   )
-
-  render(<Component />)
 
   const colleagueRow = getColleagueRow()
   expect(screen.getByTestId('favorite-colleagues')).not.toHaveTextContent(favoriteUser)
